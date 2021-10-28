@@ -1,10 +1,7 @@
 const url = require("url");
-const protocols = {
-  http: require("http"),
-  https: require("https"),
-};
+const https = require("https");
 
-module.exports = (endpoint, opts, key) => {
+module.exports = (endpoint) => {
   return function simpleHttpProxy(req, res, next) {
     // Get our forwarding info
     let hostInfo = req.headers.host.split(":");
@@ -23,32 +20,20 @@ module.exports = (endpoint, opts, key) => {
       path: path,
       method: req.method,
     };
-    console.log(options);
-    // Enable forwarding headers
-    // Get the path at which the middleware is mounted
-    let resPath = req.originalUrl.replace(req.url, "").split("?")[0];
 
-    // We'll need to add a / if it's not on there
-    if (resPath.indexOf("/") !== 0) resPath = "/" + resPath;
 
     // Pass along our headers
     options.headers["Authorization"] = 'Bearer ' + process.env.API_TOKEN;
     options.headers["Content-type"] = "application/json";
 
     // Make the request with the correct protocol
-    let request = protocols[
-      (parsedUrl.protocol || "http").replace(":", "")
-    ].request(options, function (response) {
-      console.log(options);
+    let request = https.request(options, function (response) {
+
       // The headers have already been sent so we can't actually respond to this request
       if (res.headersSent) {
         res.end();
         return request.abort();
       }
-
-      // Send down the statusCode and headers
-
-      // allow the caller to override the default pipe behavior
 
       res.writeHead(response.statusCode, response.headers);
 
