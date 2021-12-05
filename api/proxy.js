@@ -21,14 +21,12 @@ module.exports = (endpoint) => {
       method: req.method,
     };
 
-
     // Pass along our headers
-    options.headers["Authorization"] = 'Bearer ' + process.env.API_TOKEN;
-    options.headers["Content-type"] = "application/json";
+    // options.headers["Authorization"] = 'Bearer ' + process.env.API_TOKEN;
+    // options.headers["Content-type"] = "application/json";
 
     // Make the request with the correct protocol
     let request = https.request(options, function (response) {
-
       // The headers have already been sent so we can't actually respond to this request
       if (res.headersSent) {
         res.end();
