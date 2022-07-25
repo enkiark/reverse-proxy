@@ -12,4 +12,4 @@ const app = (module.exports = express());
 /**
  * Mount the proxy middleware
  */
-app.use("/api", proxy(process.env.API_URL));
+app.use("/", proxy(process.env.API_URL));
